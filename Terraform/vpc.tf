@@ -4,6 +4,7 @@ locals {
   env     = var.env
 }
 
+#VPC Creation
 resource "aws_vpc" "vpc" {
   cidr_block           = var.cidr-block
   instance_tenancy     = "default"
