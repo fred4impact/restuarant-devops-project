@@ -26,7 +26,7 @@ pipeline {
 
         stage('Install Dependencies') {
             steps {
-                dir('Code') {
+                dir('Restaurant-app') {
                     sh 'npm install'
                 }
             }
@@ -62,7 +62,7 @@ pipeline {
 
         stage('OWASP Dependency Check') {
             steps {
-                dir('Code') {
+                dir('Restuarant-app') {
                     echo "🔒 Running OWASP Dependency Check..."
                     dependencyCheck additionalArguments: '--scan ./ --format XML --out .', odcInstallation: 'owasp-dp-check'
                     dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
@@ -72,7 +72,7 @@ pipeline {
 
         stage('Trivy FS Scan') {
             steps {
-                dir('Code') {
+                dir('Restaurant-app') {
                     sh '''
                         echo "🔍 Running Trivy File System Scan..."
                         trivy fs . > trivy-fs-report.txt
@@ -83,7 +83,7 @@ pipeline {
 
         stage('Docker Image Build') {
             steps {
-                dir('Code') {
+                dir('Restaurant-app') {
                     script {
                         docker.withRegistry('https://index.docker.io/v1/', 'docker') {
                             withCredentials([string(credentialsId: 'mock-api', variable: 'MOCK_API_URL')]) {
@@ -102,7 +102,7 @@ pipeline {
 
         stage('Docker Image Push') {
             steps {
-                dir('Code') {
+                dir('Restaurant-app') {
                     script {
                         docker.withRegistry('https://index.docker.io/v1/', 'docker') {
                             sh '''
