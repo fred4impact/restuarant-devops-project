@@ -1,145 +1,16 @@
-pipeline{
-    agent any
-    tools{
-        nodejs 'nodejs'
-    }
-    environment {
-        SCANNER_HOME=tool 'sonar-server',
-        VITE_API_URL = credentials('vite-api-url')
-    }
-    stages {
-        stage('Workspace Cleaning'){
-            steps{
-                cleanWs()
-            }
-        }
-        stage('Checkout from Git'){
-            steps{
-                git branch: 'master', url: 'https://github.com/fred4impact/restuarant-devops-project.git'
-            }
-        }
-        stage('Install Dependencies') {
-            steps {
-                dir('Code') {
-                    // Install project dependencies (needed for OWASP + build)
-                    sh 'npm install'
-                }
-            }
-        }
-        stage("SonarQube Analysis") {
-            steps {
-                dir('Code') {
-                    withSonarQubeEnv('sonar-server') {
-                        // Run SonarQube scanner using npx (no global install)
-                        sh '''
-                        echo "🔍 Starting SonarQube Analysis..."
-                        npx @sonar/scan \
-                        -Dsonar.projectKey=RestaurantApp \
-                        -Dsonar.projectName=RestaurantApp \
-                        -Dsonar.sources=src \
-                        -Dsonar.language=ts \
-                        -Dsonar.exclusions=dist/**,node_modules/**,public/** \
-                        -Dsonar.host.url=$SONAR_HOST_URL \
-                        -Dsonar.login=$SONAR_AUTH_TOKEN
-                        '''
+stage("Docker Image Build"){
+    steps{
+        dir('Code') {
+            script{
+                withDockerRegistry(credentialsId: 'docker', toolName: 'docker'){   
+                    withCredentials([string(credentialsId: 'mock-api', variable: 'MOCK_API_URL')]) {
+                        sh """
+                            docker build \
+                                --build-arg VITE_API_URL="${VITE_API_URL}" \
+                                -t restaurant-app:latest .
+                        """
                     }
                 }
-            }
-        }
-        stage("Quality Gate") {
-            steps {
-                    script {
-                        waitForQualityGate abortPipeline: false, credentialsId: 'sonar-token' 
-                    }
-                } 
-            }
-        stage('OWASP Dependency Check') {
-            steps {
-                dir('Code') {
-                    echo "🔒 Running OWASP Dependency Check..."
-                    dependencyCheck additionalArguments: '--scan ./ --format XML --out .', odcInstallation: 'owasp-dp-check'
-                    dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
-                }
-            }
-        }
-        stage('TRIVY FS SCAN') {
-            steps {
-                dir('Code') {
-                    sh "trivy fs . > trivyfs.txt"
-                }
-            }
-        }
-        stage("Docker Image Build"){
-            steps{
-                dir('Code') {
-                    script{
-                       withDockerRegistry(credentialsId: 'docker', toolName: 'docker'){   
-                           
-                           withCredentials([string(credentialsId: 'mock-api', variable: 'MOCK-API-URL')]) {
-                                sh """
-                                    docker build \
-                                        --build-arg VITE_API_URL="${VITE_API_URL}" \
-                                        -t restaurant-app:latest .
-                                """
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        stage("Docker Image Pushing"){
-            steps{
-                dir('Code') {
-                    script{
-                       withDockerRegistry(credentialsId: 'docker', toolName: 'docker'){   
-                           sh "docker tag netflix runtesting/netflix:latest "
-                           sh "docker push runtesting/netflix:latest "
-                        }
-                    }
-                }
-            }
-        }
-        stage("TRIVY Image Scan"){
-            steps{
-                sh "trivy image runtesting/restaurant-app:latest > trivyimage.txt" 
-            }
-        }
-        stage('Deploy to Kubernetes') {
-            steps {
-                script {
-                    dir('K8s') {
-                        withKubeConfig(credentialsId: 'k8s') {
-                            sh 'kubectl apply -f deployment.yml'
-                            sh 'kubectl apply -f service.yml'
-                            sh 'kubectl get svc'
-                            sh 'kubectl get all'
-                        }
-                    }
-                }
-            }
-        }
-    }
-    post {
-        always {
-            script {
-                def colorCode = currentBuild.result == 'SUCCESS' ? '#2eb886' : 
-                                currentBuild.result == 'FAILURE' ? '#ff0000' : '#daa038'
-    
-                slackSend(
-                    channel: '#devops-alerts',
-                    color: colorCode,
-                    message: """
-                    *🚀 Jenkins Build Notification*
-                    *Project:* ${env.JOB_NAME}
-                    *Build Number:* #${env.BUILD_NUMBER}
-                    *Status:* *${currentBuild.result}*
-                    *URL:* <${env.BUILD_URL}|Open Build>
-    
-                    ${currentBuild.result == 'SUCCESS' ? '✅ All steps completed successfully!' : 
-                    currentBuild.result == 'FAILURE' ? '❌ Build failed. Please check logs.' : 
-                    '⚠️ Build is unstable or aborted.'}
-                    """.stripIndent()
-                )
             }
         }
     }
