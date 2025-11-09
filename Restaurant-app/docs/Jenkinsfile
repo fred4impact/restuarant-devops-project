@@ -1,0 +1,85 @@
+pipeline {
+    agent any
+    
+    environment {
+        // Use Jenkins environment variable or default to MockAPI.io
+        // Set this in Jenkins → Manage Jenkins → Configure System → Global properties
+        // Or in Jenkins → Your Job → Configure → Build Environment → Inject environment variables
+        VITE_API_URL = "${env.VITE_API_URL ?: 'https://690dc4e6bd0fefc30a0241c0.mockapi.io/api/v1'}"
+    }
+    
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+        
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    // Build Docker image with API URL from environment variable
+                    sh """
+                        docker build \
+                          --build-arg VITE_API_URL="${VITE_API_URL}" \
+                          -t restaurant-app:${env.BUILD_NUMBER} \
+                          -t restaurant-app:latest \
+                          .
+                    """
+                }
+            }
+        }
+        
+        stage('Test') {
+            steps {
+                script {
+                    // Optional: Run container and test
+                    sh """
+                        docker run -d --name restaurant-app-test -p 3000:80 restaurant-app:latest
+                        sleep 5
+                        curl -f http://localhost:3000/health || exit 1
+                        docker stop restaurant-app-test
+                        docker rm restaurant-app-test
+                    """
+                }
+            }
+        }
+        
+        stage('Push to Registry') {
+            when {
+                anyOf {
+                    branch 'main'
+                    branch 'master'
+                }
+            }
+            steps {
+                script {
+                    // Optional: Push to Docker registry
+                    withCredentials([usernamePassword(credentialsId: 'docker-registry-credentials', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+                        sh """
+                            echo \$DOCKER_PASS | docker login -u \$DOCKER_USER --password-stdin
+                            docker tag restaurant-app:latest your-registry/restaurant-app:${env.BUILD_NUMBER}
+                            docker tag restaurant-app:latest your-registry/restaurant-app:latest
+                            docker push your-registry/restaurant-app:${env.BUILD_NUMBER}
+                            docker push your-registry/restaurant-app:latest
+                        """
+                    }
+                }
+            }
+        }
+    }
+    
+    post {
+        always {
+            // Clean up
+            sh 'docker system prune -f || true'
+        }
+        success {
+            echo 'Build succeeded!'
+        }
+        failure {
+            echo 'Build failed!'
+        }
+    }
+}
+

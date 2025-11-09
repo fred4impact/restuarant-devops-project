@@ -1,0 +1,38 @@
+name: Build Docker Image
+
+on:
+  push:
+    branches:
+      - main
+      - master
+  workflow_dispatch:  # Allows manual trigger
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: false  # Don't push, just build
+          tags: restaurant-app:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          build-args: |
+            VITE_API_URL=${{ secrets.VITE_API_URL || 'https://690dc4e6bd0fefc30a0241c0.mockapi.io/api/v1' }}
+
+      - name: Save Docker image as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: docker-image
+          path: /tmp/.buildx-cache
+          retention-days: 1
+

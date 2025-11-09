@@ -1,0 +1,418 @@
+[
+  {
+    "name": "Bella Italia",
+    "image": "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800",
+    "rating": 4.5,
+    "cuisineType": "Italian",
+    "priceRange": "$$",
+    "location": "Downtown",
+    "description": "Authentic Italian cuisine with fresh ingredients",
+    "menu": [
+      {
+        "id": 1,
+        "name": "Margherita Pizza",
+        "description": "Fresh mozzarella, tomato sauce, basil",
+        "price": 18.99,
+        "category": "Pizza"
+      },
+      {
+        "id": 2,
+        "name": "Spaghetti Carbonara",
+        "description": "Creamy pasta with bacon and parmesan",
+        "price": 22.99,
+        "category": "Pasta"
+      },
+      {
+        "id": 3,
+        "name": "Tiramisu",
+        "description": "Classic Italian dessert with coffee and mascarpone",
+        "price": 12.99,
+        "category": "Dessert"
+      }
+    ]
+  },
+  {
+    "name": "Sakura Sushi",
+    "image": "https://images.unsplash.com/photo-1579584425555-c3ce17fd4351?w=800",
+    "rating": 4.8,
+    "cuisineType": "Japanese",
+    "priceRange": "$$$",
+    "location": "Midtown",
+    "description": "Fresh sushi and traditional Japanese dishes",
+    "menu": [
+      {
+        "id": 4,
+        "name": "Salmon Sashimi",
+        "description": "Fresh Atlantic salmon, 8 pieces",
+        "price": 24.99,
+        "category": "Sashimi"
+      },
+      {
+        "id": 5,
+        "name": "Dragon Roll",
+        "description": "Eel, cucumber, avocado, eel sauce",
+        "price": 16.99,
+        "category": "Rolls"
+      },
+      {
+        "id": 6,
+        "name": "Miso Soup",
+        "description": "Traditional Japanese soup with tofu and seaweed",
+        "price": 6.99,
+        "category": "Soup"
+      }
+    ]
+  },
+  {
+    "name": "Taco Fiesta",
+    "image": "https://images.unsplash.com/photo-1565299585323-38174c2b3c44?w=800",
+    "rating": 4.3,
+    "cuisineType": "Mexican",
+    "priceRange": "$",
+    "location": "East Side",
+    "description": "Authentic Mexican street food",
+    "menu": [
+      {
+        "id": 7,
+        "name": "Carnitas Tacos",
+        "description": "Slow-cooked pork, onions, cilantro",
+        "price": 12.99,
+        "category": "Tacos"
+      },
+      {
+        "id": 8,
+        "name": "Chicken Quesadilla",
+        "description": "Grilled chicken, cheese, peppers",
+        "price": 14.99,
+        "category": "Quesadillas"
+      },
+      {
+        "id": 9,
+        "name": "Guacamole & Chips",
+        "description": "Fresh avocado dip with crispy tortilla chips",
+        "price": 8.99,
+        "category": "Appetizers"
+      }
+    ]
+  },
+  {
+    "name": "Golden Dragon",
+    "image": "https://images.unsplash.com/photo-1526318896980-cf78c088247c?w=800",
+    "rating": 4.6,
+    "cuisineType": "Chinese",
+    "priceRange": "$$",
+    "location": "Chinatown",
+    "description": "Traditional Chinese cuisine",
+    "menu": [
+      {
+        "id": 10,
+        "name": "Kung Pao Chicken",
+        "description": "Spicy chicken with peanuts and vegetables",
+        "price": 19.99,
+        "category": "Entrees"
+      },
+      {
+        "id": 11,
+        "name": "Sweet and Sour Pork",
+        "description": "Crispy pork with tangy sauce",
+        "price": 21.99,
+        "category": "Entrees"
+      },
+      {
+        "id": 12,
+        "name": "Spring Rolls",
+        "description": "Crispy vegetable rolls with dipping sauce",
+        "price": 7.99,
+        "category": "Appetizers"
+      }
+    ]
+  },
+  {
+    "name": "Le Bistro",
+    "image": "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800",
+    "rating": 4.7,
+    "cuisineType": "French",
+    "priceRange": "$$$",
+    "location": "Uptown",
+    "description": "Classic French bistro fare",
+    "menu": [
+      {
+        "id": 13,
+        "name": "Coq au Vin",
+        "description": "Braised chicken in red wine",
+        "price": 28.99,
+        "category": "Main Course"
+      },
+      {
+        "id": 14,
+        "name": "Bouillabaisse",
+        "description": "Provençal fish stew",
+        "price": 32.99,
+        "category": "Main Course"
+      },
+      {
+        "id": 15,
+        "name": "Crème Brûlée",
+        "description": "Classic French custard with caramelized sugar",
+        "price": 11.99,
+        "category": "Dessert"
+      }
+    ]
+  },
+  {
+    "name": "Spice Garden",
+    "image": "https://images.unsplash.com/photo-1585937421612-70a008356fbe?w=800",
+    "rating": 4.4,
+    "cuisineType": "Indian",
+    "priceRange": "$$",
+    "location": "Little India",
+    "description": "Authentic Indian curries and tandoori dishes",
+    "menu": [
+      {
+        "id": 16,
+        "name": "Butter Chicken",
+        "description": "Creamy tomato curry with tender chicken",
+        "price": 18.99,
+        "category": "Curries"
+      },
+      {
+        "id": 17,
+        "name": "Chicken Tikka Masala",
+        "description": "Grilled chicken in spiced tomato sauce",
+        "price": 19.99,
+        "category": "Curries"
+      },
+      {
+        "id": 18,
+        "name": "Garlic Naan",
+        "description": "Fresh baked bread with garlic and herbs",
+        "price": 4.99,
+        "category": "Bread"
+      }
+    ]
+  },
+  {
+    "name": "Thai Orchid",
+    "image": "https://images.unsplash.com/photo-1559314809-0d155014e29e?w=800",
+    "rating": 4.6,
+    "cuisineType": "Thai",
+    "priceRange": "$$",
+    "location": "West Side",
+    "description": "Authentic Thai cuisine with bold flavors",
+    "menu": [
+      {
+        "id": 19,
+        "name": "Pad Thai",
+        "description": "Stir-fried noodles with shrimp and vegetables",
+        "price": 16.99,
+        "category": "Noodles"
+      },
+      {
+        "id": 20,
+        "name": "Green Curry",
+        "description": "Spicy coconut curry with chicken and vegetables",
+        "price": 17.99,
+        "category": "Curries"
+      },
+      {
+        "id": 21,
+        "name": "Tom Yum Soup",
+        "description": "Hot and sour soup with shrimp and mushrooms",
+        "price": 12.99,
+        "category": "Soup"
+      }
+    ]
+  },
+  {
+    "name": "Mediterranean Breeze",
+    "image": "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=800",
+    "rating": 4.5,
+    "cuisineType": "Mediterranean",
+    "priceRange": "$$",
+    "location": "Riverside",
+    "description": "Fresh Mediterranean dishes with olive oil and herbs",
+    "menu": [
+      {
+        "id": 22,
+        "name": "Grilled Lamb Kebabs",
+        "description": "Marinated lamb with herbs and vegetables",
+        "price": 24.99,
+        "category": "Grilled"
+      },
+      {
+        "id": 23,
+        "name": "Hummus & Pita",
+        "description": "Creamy chickpea dip with warm pita bread",
+        "price": 9.99,
+        "category": "Appetizers"
+      },
+      {
+        "id": 24,
+        "name": "Greek Salad",
+        "description": "Fresh vegetables with feta cheese and olives",
+        "price": 13.99,
+        "category": "Salads"
+      }
+    ]
+  },
+  {
+    "name": "Seoul Garden",
+    "image": "https://images.unsplash.com/photo-1606787619248-f301830a5a57?w=800",
+    "rating": 4.7,
+    "cuisineType": "Korean",
+    "priceRange": "$$",
+    "location": "Koreatown",
+    "description": "Authentic Korean BBQ and traditional dishes",
+    "menu": [
+      {
+        "id": 25,
+        "name": "Bulgogi",
+        "description": "Marinated beef grilled to perfection",
+        "price": 23.99,
+        "category": "BBQ"
+      },
+      {
+        "id": 26,
+        "name": "Kimchi Jjigae",
+        "description": "Spicy kimchi stew with pork and tofu",
+        "price": 16.99,
+        "category": "Stew"
+      },
+      {
+        "id": 27,
+        "name": "Bibimbap",
+        "description": "Mixed rice bowl with vegetables, beef, and egg",
+        "price": 18.99,
+        "category": "Rice Bowl"
+      }
+    ]
+  },
+  {
+    "name": "Smokehouse Grill",
+    "image": "https://images.unsplash.com/photo-1544025162-d76694265947?w=800",
+    "rating": 4.6,
+    "cuisineType": "American",
+    "priceRange": "$$",
+    "location": "South Side",
+    "description": "Classic American BBQ with slow-smoked meats",
+    "menu": [
+      {
+        "id": 28,
+        "name": "BBQ Ribs",
+        "description": "Slow-smoked pork ribs with house sauce",
+        "price": 26.99,
+        "category": "BBQ"
+      },
+      {
+        "id": 29,
+        "name": "Brisket Sandwich",
+        "description": "Tender smoked brisket on brioche bun",
+        "price": 19.99,
+        "category": "Sandwiches"
+      },
+      {
+        "id": 30,
+        "name": "Mac & Cheese",
+        "description": "Creamy macaroni with three cheeses",
+        "price": 12.99,
+        "category": "Sides"
+      }
+    ]
+  },
+  {
+    "name": "Athena's Taverna",
+    "image": "https://images.unsplash.com/photo-1551218808-94e220e084d2?w=800",
+    "rating": 4.8,
+    "cuisineType": "Greek",
+    "priceRange": "$$",
+    "location": "Greek Quarter",
+    "description": "Traditional Greek cuisine with fresh ingredients",
+    "menu": [
+      {
+        "id": 31,
+        "name": "Moussaka",
+        "description": "Layered eggplant with ground meat and béchamel",
+        "price": 22.99,
+        "category": "Main Course"
+      },
+      {
+        "id": 32,
+        "name": "Souvlaki",
+        "description": "Grilled chicken skewers with tzatziki",
+        "price": 18.99,
+        "category": "Grilled"
+      },
+      {
+        "id": 33,
+        "name": "Baklava",
+        "description": "Sweet pastry with honey and nuts",
+        "price": 8.99,
+        "category": "Dessert"
+      }
+    ]
+  },
+  {
+    "name": "Tapas Barcelona",
+    "image": "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=800",
+    "rating": 4.5,
+    "cuisineType": "Spanish",
+    "priceRange": "$$$",
+    "location": "Old Town",
+    "description": "Authentic Spanish tapas and paella",
+    "menu": [
+      {
+        "id": 34,
+        "name": "Paella Valenciana",
+        "description": "Traditional saffron rice with seafood and chicken",
+        "price": 32.99,
+        "category": "Main Course"
+      },
+      {
+        "id": 35,
+        "name": "Patatas Bravas",
+        "description": "Crispy potatoes with spicy tomato sauce",
+        "price": 9.99,
+        "category": "Tapas"
+      },
+      {
+        "id": 36,
+        "name": "Gambas al Ajillo",
+        "description": "Garlic shrimp in olive oil",
+        "price": 16.99,
+        "category": "Tapas"
+      }
+    ]
+  },
+  {
+    "name": "Pho Saigon",
+    "image": "https://images.unsplash.com/photo-1559339352-11d035aa65de?w=800",
+    "rating": 4.4,
+    "cuisineType": "Vietnamese",
+    "priceRange": "$",
+    "location": "Little Saigon",
+    "description": "Authentic Vietnamese street food and pho",
+    "menu": [
+      {
+        "id": 37,
+        "name": "Pho Bo",
+        "description": "Traditional beef noodle soup with herbs",
+        "price": 14.99,
+        "category": "Soup"
+      },
+      {
+        "id": 38,
+        "name": "Banh Mi",
+        "description": "Vietnamese sandwich with pork, pate, and pickled vegetables",
+        "price": 10.99,
+        "category": "Sandwiches"
+      },
+      {
+        "id": 39,
+        "name": "Spring Rolls",
+        "description": "Fresh rice paper rolls with shrimp and herbs",
+        "price": 8.99,
+        "category": "Appetizers"
+      }
+    ]
+  }
+]

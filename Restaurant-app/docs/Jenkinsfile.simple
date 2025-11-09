@@ -1,0 +1,32 @@
+// Simple Jenkinsfile - just builds the Docker image
+pipeline {
+    agent any
+    
+    environment {
+        // Get API URL from Jenkins environment variable
+        // Set in Jenkins → Manage Jenkins → Configure System → Global properties
+        VITE_API_URL = "${env.VITE_API_URL ?: 'https://690dc4e6bd0fefc30a0241c0.mockapi.io/api/v1'}"
+    }
+    
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+        
+        stage('Build') {
+            steps {
+                script {
+                    sh """
+                        docker build \
+                          --build-arg VITE_API_URL="${VITE_API_URL}" \
+                          -t restaurant-app:latest \
+                          .
+                    """
+                }
+            }
+        }
+    }
+}
+

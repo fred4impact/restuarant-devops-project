@@ -1,0 +1,29 @@
+version: "3.8"
+
+services:
+  restaurant-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        # MockAPI.io API URL - pass at build time
+        # Default: https://690dc4e6bd0fefc30a0241c0.mockapi.io/api/v1
+        VITE_API_URL: ${VITE_API_URL:-https://690dc4e6bd0fefc30a0241c0.mockapi.io/api/v1}
+    container_name: restaurant-discovery-app
+    ports:
+      - "3000:80"
+    restart: unless-stopped
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "wget",
+          "--quiet",
+          "--tries=1",
+          "--spider",
+          "http://localhost/health",
+        ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
