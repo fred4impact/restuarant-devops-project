@@ -29,7 +29,7 @@ resource "aws_internet_gateway" "igw" {
 }
 
 resource "aws_subnet" "public-subnet" {
-  count                   = var.pub-subnet-count
+  count                   = var.public-subnet-count
   vpc_id                  = aws_vpc.vpc.id
   cidr_block              = element(var.pub-cidr-block, count.index)
   availability_zone       = element(var.pub-availability-zone, count.index)

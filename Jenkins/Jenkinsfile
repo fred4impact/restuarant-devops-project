@@ -4,7 +4,8 @@ pipeline{
         nodejs 'nodejs'
     }
     environment {
-        SCANNER_HOME=tool 'sonar-server'
+        SCANNER_HOME=tool 'sonar-server',
+        VITE_API_URL = credentials('vite-api-url')
     }
     stages {
         stage('Workspace Cleaning'){
@@ -14,7 +15,7 @@ pipeline{
         }
         stage('Checkout from Git'){
             steps{
-                git branch: 'master', url: 'https://github.com/fred4impact/clone-netflix-devops-project.git'
+                git branch: 'master', url: 'https://github.com/fred4impact/restuarant-devops-project.git'
             }
         }
         stage('Install Dependencies') {
@@ -33,8 +34,8 @@ pipeline{
                         sh '''
                         echo "🔍 Starting SonarQube Analysis..."
                         npx @sonar/scan \
-                        -Dsonar.projectKey=NetflixClone \
-                        -Dsonar.projectName=NetflixClone \
+                        -Dsonar.projectKey=RestaurantApp \
+                        -Dsonar.projectName=RestaurantApp \
                         -Dsonar.sources=src \
                         -Dsonar.language=ts \
                         -Dsonar.exclusions=dist/**,node_modules/**,public/** \
@@ -74,11 +75,11 @@ pipeline{
                     script{
                        withDockerRegistry(credentialsId: 'docker', toolName: 'docker'){   
                            
-                           withCredentials([string(credentialsId: 'tmdb-api', variable: 'TMDB_API_KEY')]) {
+                           withCredentials([string(credentialsId: 'mock-api', variable: 'MOCK-API-URL')]) {
                                 sh """
                                     docker build \
-                                    --build-arg TMDB_V3_API_KEY=${TMDB_API_KEY} \
-                                    -t netflix .
+                                        --build-arg VITE_API_URL="${VITE_API_URL}" \
+                                        -t restaurant-app:latest .
                                 """
                             }
                         }
@@ -100,7 +101,7 @@ pipeline{
         }
         stage("TRIVY Image Scan"){
             steps{
-                sh "trivy image runtesting/netflix:latest > trivyimage.txt" 
+                sh "trivy image runtesting/restaurant-app:latest > trivyimage.txt" 
             }
         }
         stage('Deploy to Kubernetes') {

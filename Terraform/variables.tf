@@ -1,7 +1,7 @@
 variable "aws-region" {}
 variable "env" {}
 variable "cidr-block" {}
-variable "pub-subnet-count" {}
+variable "public-subnet-count" {}
 variable "pub-cidr-block" {
   type = list(string)
 }
