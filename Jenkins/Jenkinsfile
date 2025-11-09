@@ -34,7 +34,7 @@ pipeline {
 
         stage('SonarQube Analysis') {
             steps {
-                dir('Code') {
+                dir('Restaurant-app') {
                     withSonarQubeEnv('sonar-server') {
                         sh '''
                         echo "🔍 Starting SonarQube Analysis..."
