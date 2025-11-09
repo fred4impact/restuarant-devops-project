@@ -1,16 +1,168 @@
-stage("Docker Image Build"){
-    steps{
-        dir('Code') {
-            script{
-                withDockerRegistry(credentialsId: 'docker', toolName: 'docker'){   
-                    withCredentials([string(credentialsId: 'mock-api', variable: 'MOCK_API_URL')]) {
-                        sh """
-                            docker build \
-                                --build-arg VITE_API_URL="${VITE_API_URL}" \
-                                -t restaurant-app:latest .
-                        """
+pipeline {
+    agent any
+
+    tools {
+        nodejs 'nodejs'
+    }
+
+    environment {
+        SCANNER_HOME = tool 'sonar-server'
+        VITE_API_URL = credentials('vite-api-url')
+    }
+
+    stages {
+
+        stage('Workspace Cleaning') {
+            steps {
+                cleanWs()
+            }
+        }
+
+        stage('Checkout from Git') {
+            steps {
+                git branch: 'master', url: 'https://github.com/fred4impact/restuarant-devops-project.git'
+            }
+        }
+
+        stage('Install Dependencies') {
+            steps {
+                dir('Code') {
+                    sh 'npm install'
+                }
+            }
+        }
+
+        stage('SonarQube Analysis') {
+            steps {
+                dir('Code') {
+                    withSonarQubeEnv('sonar-server') {
+                        sh '''
+                        echo "🔍 Starting SonarQube Analysis..."
+                        npx sonar-scanner \
+                            -Dsonar.projectKey=RestaurantApp \
+                            -Dsonar.projectName=RestaurantApp \
+                            -Dsonar.sources=src \
+                            -Dsonar.language=ts \
+                            -Dsonar.exclusions=dist/**,node_modules/**,public/** \
+                            -Dsonar.host.url=$SONAR_HOST_URL \
+                            -Dsonar.login=$SONAR_AUTH_TOKEN
+                        '''
                     }
                 }
+            }
+        }
+
+        stage('Quality Gate') {
+            steps {
+                script {
+                    waitForQualityGate abortPipeline: true, credentialsId: 'sonar-token'
+                }
+            }
+        }
+
+        stage('OWASP Dependency Check') {
+            steps {
+                dir('Code') {
+                    echo "🔒 Running OWASP Dependency Check..."
+                    dependencyCheck additionalArguments: '--scan ./ --format XML --out .', odcInstallation: 'owasp-dp-check'
+                    dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
+                }
+            }
+        }
+
+        stage('Trivy FS Scan') {
+            steps {
+                dir('Code') {
+                    sh '''
+                        echo "🔍 Running Trivy File System Scan..."
+                        trivy fs . > trivy-fs-report.txt
+                    '''
+                }
+            }
+        }
+
+        stage('Docker Image Build') {
+            steps {
+                dir('Code') {
+                    script {
+                        docker.withRegistry('https://index.docker.io/v1/', 'docker') {
+                            withCredentials([string(credentialsId: 'mock-api', variable: 'MOCK_API_URL')]) {
+                                sh '''
+                                    echo "🏗️ Building Docker image..."
+                                    docker build \
+                                        --build-arg VITE_API_URL="${VITE_API_URL}" \
+                                        -t runtesting/restaurant-app:latest .
+                                '''
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        stage('Docker Image Push') {
+            steps {
+                dir('Code') {
+                    script {
+                        docker.withRegistry('https://index.docker.io/v1/', 'docker') {
+                            sh '''
+                                echo "📤 Pushing Docker image to registry..."
+                                docker push runtesting/restaurant-app:latest
+                            '''
+                        }
+                    }
+                }
+            }
+        }
+
+        stage('Trivy Image Scan') {
+            steps {
+                sh '''
+                    echo "🧪 Running Trivy Image Scan..."
+                    trivy image runtesting/restaurant-app:latest > trivy-image-report.txt
+                '''
+            }
+        }
+
+        stage('Deploy to Kubernetes') {
+            steps {
+                dir('K8s') {
+                    script {
+                        withKubeConfig(credentialsId: 'k8s') {
+                            sh '''
+                                echo "🚀 Deploying to Kubernetes..."
+                                kubectl apply -f deployment.yml
+                                kubectl apply -f service.yml
+                                kubectl get all
+                            '''
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            script {
+                def colorCode = currentBuild.result == 'SUCCESS' ? '#2eb886' :
+                                currentBuild.result == 'FAILURE' ? '#ff0000' : '#daa038'
+
+                slackSend(
+                    channel: '#devops-alerts',
+                    color: colorCode,
+                    message: """
+                    *🚀 Jenkins Build Notification*
+                    *Project:* ${env.JOB_NAME}
+                    *Build Number:* #${env.BUILD_NUMBER}
+                    *Status:* *${currentBuild.result}*
+                    *URL:* <${env.BUILD_URL}|Open Build>
+
+                    ${currentBuild.result == 'SUCCESS' ? '✅ All steps completed successfully!' :
+                    currentBuild.result == 'FAILURE' ? '❌ Build failed. Please check logs.' :
+                    '⚠️ Build unstable or aborted.'}
+                    """.stripIndent()
+                )
             }
         }
     }
