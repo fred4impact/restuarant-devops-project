@@ -20,7 +20,7 @@ pipeline {
 
         stage('Checkout from Git') {
             steps {
-                git branch: 'master', url: 'https://github.com/fred4impact/restuarant-devops-project.git'
+                git branch: 'master', url: 'https://github.com/fred4impact/kubernetes-devops-project.git'
             }
         }
 
