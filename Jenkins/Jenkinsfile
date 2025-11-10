@@ -62,7 +62,7 @@ pipeline {
 
         stage('OWASP Dependency Check') {
             steps {
-                dir('Restuarant-app') {
+                dir('Restaurant-app') {
                     echo "🔒 Running OWASP Dependency Check..."
                     dependencyCheck additionalArguments: '--scan ./ --format XML --out .', odcInstallation: 'owasp-dp-check'
                     dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
