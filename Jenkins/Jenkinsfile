@@ -126,7 +126,7 @@ pipeline {
             steps {
                 dir('K8s') {
                     script {
-                        withKubeConfig(credentialsId: 'k8s') {
+                        withKubeConfig(credentialsId: 'kubeconfig-creds') {
                             sh '''
                                 echo "🚀 Deploying to Kubernetes..."
                                 kubectl apply -f deployment.yml
