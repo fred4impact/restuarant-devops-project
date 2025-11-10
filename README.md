@@ -12,6 +12,22 @@ A DevOps project showcasing CI/CD practices, infrastructure as code, security sc
 - **Infrastructure Automation** - GitHub Actions for Terraform workflows
 - **Monitoring** - Prometheus for metrics collection
 
+## 📸 Project Visual Overview
+![project](images/project.png)
+
+
+### GitHub Actions
+![GitHub Actions](images/github-actions.png)
+
+### Jenkins Pipeline
+![Jenkins Job](images/jenkins-job.png)
+
+### Terraform Infrastructure
+![Terraform](images/terraform.png)
+
+### Kubernetes Deployment
+![Kubernetes](images/kubernetes.png)
+
 ## 📁 Project Structure
 
 ```
