@@ -79,3 +79,5 @@ See `Restaurant-app/docs/` for detailed setup guides:
 ---
 
 **Note**: Configure credentials and URLs according to your environment.
+
+## Links to repo
