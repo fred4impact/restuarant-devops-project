@@ -27,6 +27,9 @@ A DevOps project showcasing CI/CD practices, infrastructure as code, security sc
 ### Kubernetes Deployment
 ![Kubernetes](images/kubernetes.png)
 
+### Promethius  Monitoring
+![Kubernetes](images/promethius.png)
+
 ## 📁 Project Structure
 
 ```
