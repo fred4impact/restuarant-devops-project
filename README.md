@@ -19,8 +19,7 @@ A DevOps project showcasing CI/CD practices, infrastructure as code, security sc
 ### GitHub Actions
 ![GitHub Actions](images/github-actions.png)
 
-### Jenkins Pipeline
-![Jenkins Job](images/jenkins-job.png)
+
 
 ### Terraform Infrastructure
 ![Terraform](images/terraform.png)
@@ -46,6 +45,10 @@ A DevOps project showcasing CI/CD practices, infrastructure as code, security sc
 7. Trivy Filesystem Scan → 8. Docker Build → 9. Docker Push
 10. Trivy Image Scan → 11. Deploy to Kubernetes → 12. Slack Notification
 
+### Jenkins Pipeline
+![Jenkins Job](images/jenkins-job.png)
+
+
 ## 🛠️ Prerequisites
 
 - AWS Account with IAM permissions
@@ -55,6 +58,8 @@ A DevOps project showcasing CI/CD practices, infrastructure as code, security sc
 - Node.js
 
 ## 🔧 Quick Setup
+### AWS EC2 SERVERS 
+![Jenkins Job](images/servers.png)
 
 ### Infrastructure (Terraform)
 ```bash
